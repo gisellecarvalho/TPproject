@@ -1,8 +1,8 @@
 terraform {
   backend "azurerm" {
       resource_group_name = "Backend-tfstate"
-      storage_account_name = "globantstoragemarco"
+      storage_account_name = "globantstoragetpproject"
       key = "terraform.tfstate"
-      container_name = "marcocontainer"
+      container_name = "tpprojectcontainer"
   }
 }

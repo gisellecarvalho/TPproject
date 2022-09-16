@@ -20,7 +20,8 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
+  count               = 2
+  name                = "${var.prefix}.${count.index}-nic"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
@@ -29,14 +30,17 @@ resource "azurerm_network_interface" "main" {
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
   }
+
+  
 }
 
 resource "azurerm_virtual_machine" "main" {
-  name                  = "${var.prefix}-vm"
+  count                 = 2
+  name                  = "${var.prefix}.${count.index}-vm"
   location              = azurerm_resource_group.main.location
   resource_group_name   = azurerm_resource_group.main.name
-  network_interface_ids = [azurerm_network_interface.main.id]
-  vm_size               = "Standard_DS1_v2"
+  network_interface_ids = [element(azurerm_network_interface.main.*.id, count.index)]
+  vm_size               = "Standard_DS1_v2" 
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   # delete_os_disk_on_termination = true
@@ -68,3 +72,5 @@ resource "azurerm_virtual_machine" "main" {
     environment = "staging"
   }
 }
+
+
