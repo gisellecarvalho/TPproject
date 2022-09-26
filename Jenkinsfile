@@ -1,5 +1,5 @@
 pipeline{
-	agent any
+	node ('az'){
 	stages {
 	stage('build docker backend image'){
 		steps{
@@ -29,3 +29,4 @@ pipeline{
 	}
     }
 }
+
